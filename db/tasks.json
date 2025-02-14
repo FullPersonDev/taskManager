@@ -22,5 +22,17 @@
     "title": "Be Awesome",
     "description": "Martin is already so very awesome...hahaha",
     "priorityLevel": "High"
+  },
+  {
+    "id": 5,
+    "title": "User Modular Routing",
+    "description": "redesign application to use modular routing principles.  move all tasks related routes to its own file.  then import it into server.js.",
+    "priorityLevel": "High"
+  },
+  {
+    "id": 7,
+    "title": "Add Better Error Handing",
+    "description": "instead of just throwing a new generic error from response, extract the response error message.",
+    "priorityLevel": "Medium"
   }
 ]
