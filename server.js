@@ -7,8 +7,8 @@ const app = express();
 //Define port
 const PORT = 3001;
 
-//Import router for tasks
-const tasksRoutes = require('./routes/tasks');
+//Import router
+const api = require('./routes/index');
 
 //Set up middleware
 app.use(express.json());
@@ -20,8 +20,8 @@ app.use(express.static('public'));
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname,'public/index.html'));
 });
-//Use tasks router
-app.use('/api/tasks', tasksRoutes);
+//Use router
+app.use('/api', api);
 
 //Start server
 app.listen(PORT, () => {

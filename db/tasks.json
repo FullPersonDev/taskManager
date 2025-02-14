@@ -1,20 +1,8 @@
 [
   {
-    "id": 1,
-    "title": "Eat Breakfast",
-    "description": "cook some eggs and make green smoothie",
-    "priorityLevel": "Low"
-  },
-  {
     "id": 2,
     "title": "Practice Backend Development",
     "description": "Practice with NodeJS and ExpressJS to write backend server logic.",
-    "priorityLevel": "Medium"
-  },
-  {
-    "id": 3,
-    "title": "Lunch",
-    "description": "make some oatmeal with blueberries for lunch.",
     "priorityLevel": "Medium"
   },
   {
@@ -22,17 +10,5 @@
     "title": "Be Awesome",
     "description": "Martin is already so very awesome...hahaha",
     "priorityLevel": "High"
-  },
-  {
-    "id": 5,
-    "title": "User Modular Routing",
-    "description": "redesign application to use modular routing principles.  move all tasks related routes to its own file.  then import it into server.js.",
-    "priorityLevel": "High"
-  },
-  {
-    "id": 7,
-    "title": "Add Better Error Handing",
-    "description": "instead of just throwing a new generic error from response, extract the response error message.",
-    "priorityLevel": "Medium"
   }
 ]
