@@ -8,6 +8,35 @@ const taskList = document.getElementById('taskList');
 const completedList = document.getElementById('completedList');
 const completedTitle = document.getElementById('completedTitle');
 
+//Helper function to convert date/time into user's local timezone
+const formattedLocalTime = (ISOString) => {
+    const localDateTime = new Date(ISOString).toLocaleString();
+    return localDateTime;
+};
+
+//Herper function to show toast notifications
+function showToast(message, type = 'success') {
+    const toastElement = document.getElementById('toastMessage');
+    const toastBody = toastElement.querySelector('.toast-body');
+
+    // Update message text
+    toastBody.textContent = message;
+
+    // Set background color based on type (success, error, warning)
+    toastElement.classList.remove('bg-success', 'bg-danger', 'bg-warning');
+    if (type === 'success') {
+        toastElement.classList.add('bg-success');
+    } else if (type === 'error') {
+        toastElement.classList.add('bg-danger');
+    } else if (type === 'warning') {
+        toastElement.classList.add('bg-warning');
+    }
+
+    // Show toast using Bootstrap's JS API
+    const toast = new bootstrap.Toast(toastElement);
+    toast.show();
+}
+
 //Render Tasks Function
 function renderTasks(record) {
     //create elements
@@ -65,7 +94,7 @@ function renderCompleted(record) {
     h5El.textContent = record.title;
     pElDesc.textContent = `${record.description}`;
     pElPrio.textContent = `Priority: ${record.priorityLevel}`;
-    pElDate.textContent = `Completed on: ${record.completionDate}`;
+    pElDate.textContent = `Completed on: ${formattedLocalTime(record.completionDate)}`;
     //append
     divCardBody.append(pElDesc, pElPrio);
     divCard.append(h5El, divCardBody, pElDate);
@@ -92,7 +121,7 @@ function postTask(task) {
         return response.json();
     })
     .then(data => {
-        console.log(data);
+        showToast(data.message, 'success');
         getTasks(); // Fetch tasks after POST is done
     })
     .catch(error => {
@@ -114,12 +143,12 @@ function deleteTask(id) {
         return response.json();
     })
     .then(data => {
-        alert(data.message);
+        showToast(data.message, 'success');
         getTasks() //gets the fresh set of tasks
     })
     .catch(error => {
         console.error('Error:', error.message);
-        alert(error.message);
+        showToast(error.message, 'error');
     });
 };
 //DELETE from main database but add it to completed database
@@ -134,14 +163,13 @@ function completeTask(id) {
         return response.json();
     })
     .then(data => {
-        alert(data.message);
-        console.log(data);
+        showToast(data.message, 'success');
         getTasks(); //gets the fresh set of tasks
         getCompletedTasks(); //gets the fresh set of completed tasks
     })
     .catch(error => {
         console.error('Error:', error.error);
-        alert(error.error);
+        showToast(error.error, 'error');
     });
 };
 

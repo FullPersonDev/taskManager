@@ -93,10 +93,11 @@ tasksR.delete('/:id', (req, res) => {
         });
     });
 });
-//DELETE for completed tasks
+//DELETE for Completed tasks
 tasksR.delete('/completed/:id', (req, res) => {
-    //create new date and time
-    const nowDateTime = new Date().toLocaleString('en-US');
+    //create new date and time in UTC time for consistency in backend
+    //UTC time is about 6 hours ahead of Central US Time and is called by .toISOString()
+    const nowDateTime = new Date().toISOString();
 
     //create variable for id
     const taskId = parseInt(req.params.id);
