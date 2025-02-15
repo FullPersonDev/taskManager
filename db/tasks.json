@@ -1,14 +1,1 @@
-[
-  {
-    "id": 2,
-    "title": "Practice Backend Development",
-    "description": "Practice with NodeJS and ExpressJS to write backend server logic.",
-    "priorityLevel": "Medium"
-  },
-  {
-    "id": 4,
-    "title": "Be Awesome",
-    "description": "Martin is already so very awesome...hahaha",
-    "priorityLevel": "High"
-  }
-]
+[]

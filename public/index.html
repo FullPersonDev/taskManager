@@ -35,9 +35,12 @@
 
     <h3 class="mt-5">Tasks List</h3>
     <div id="taskList" class="row row-cols-1 my-3 row-gap-4"></div>
-    <h4 class="mt-5 text-body-secondary">Completed List</h4>
-    <div id="completedList" class="row row-cols-1 my-3 row-gap-4"></div>
+    <h4 id="completedTitle" class="mt-5 text-body-secondary" data-bs-toggle="collapse" data-bs-target="#completedList">
+        Completed List
+    </h4>
+    <div id="completedList" class="row row-cols-1 my-3 row-gap-4 collapse"></div>
 
     <script src="./index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

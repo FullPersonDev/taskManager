@@ -1,6 +1,7 @@
 //Import router and dependencies
 const tasksR = require('express').Router();
 const fs = require('fs');
+const { promiseHooks } = require('v8');
 
 //GET tasks
 tasksR.get('/', (req, res) => {
@@ -8,7 +9,15 @@ tasksR.get('/', (req, res) => {
     fs.readFile('./db/tasks.json', (err, data) => {
         if(err) {console.error(err)};
         //make in memory array of database
-        const tasksDB = JSON.parse(data);
+        let tasksDB;
+        //safety try check when parsing json db
+        try {
+            tasksDB = JSON.parse(data);
+        } catch (error) {
+            console.error('Error parsing JSON:', error);
+            return res.status(500).json({error: 'Database file is currupt'});
+        };
+
         //respond back to client with database
         res.json(tasksDB);
     });
@@ -23,7 +32,14 @@ tasksR.post('/', (req, res) => {
     fs.readFile('./db/tasks.json', 'utf8', (err, data) => {
         if(err) {console.error(err)};
         //make in memory array of database
-        const tasksDB = JSON.parse(data);
+        let tasksDB;
+        //safety try check when parsing json db
+        try {
+            tasksDB = JSON.parse(data);
+        } catch (error) {
+            console.error('Error parsing JSON:', error);
+            return res.status(500).json({error: 'Database file is currupt'});
+        };
         //create new task object
         const newTaskBE = {
             id: tasksDB.length > 0 ? Math.max(...tasksDB.map(task => task.id)) + 1 : 1,
@@ -49,8 +65,15 @@ tasksR.delete('/:id', (req, res) => {
     //read from database file
     fs.readFile('./db/tasks.json', 'utf8', (err, data) => {
         if(err) {console.error(err)};
-        //create in memory array of database
-        const tasksDB = JSON.parse(data);
+        //make in memory array of database
+        let tasksDB;
+        //safety try check when parsing json db
+        try {
+            tasksDB = JSON.parse(data);
+        } catch (error) {
+            console.error('Error parsing JSON:', error);
+            return res.status(500).json({error: 'Database file is currupt'});
+        };
 
         //check if provided id exists
         const taskToDelete = tasksDB.find(task => task.id === taskId);
@@ -73,16 +96,22 @@ tasksR.delete('/:id', (req, res) => {
 //DELETE for completed tasks
 tasksR.delete('/completed/:id', (req, res) => {
     //create new date and time
-    const now = new Date();
-    const formattedDate = now.toLocaleString('en-US');
+    const nowDateTime = new Date().toLocaleString('en-US');
 
     //create variable for id
     const taskId = parseInt(req.params.id);
     //read from database file
     fs.readFile('./db/tasks.json', 'utf8', (err, data) => {
         if(err) {console.error(err)};
-        //create in memory array of database
-        const tasksDB = JSON.parse(data);
+        //make in memory array of database
+        let tasksDB;
+        //safety try check when parsing json db
+        try {
+            tasksDB = JSON.parse(data);
+        } catch (error) {
+            console.error('Error parsing JSON:', error);
+            return res.status(500).json({error: 'Database file is currupt'});
+        };
         //check if task exist
         let completedTask = tasksDB.find(task => task.id === taskId);
         if(!completedTask) {
@@ -96,16 +125,24 @@ tasksR.delete('/completed/:id', (req, res) => {
             if(err) {
                 return res.status(500).json({error: 'Could not save completed task'});
             };
+
             //Add task to completed tasks db
             fs.readFile('./db/completedTasks.json', 'utf8', (err, data) => {
                 if(err) {console.error(err)}
                 //create in memory array of database
-                const completedDB = JSON.parse(data);
+                let completedDB;
+                //safety try check when parsing json db
+                try {
+                    completedDB = JSON.parse(data);
+                } catch (error) {
+                    console.error('Error parsing JSON:', error);
+                    return res.status(500).json({error: 'Database file is currupt'});
+                }
                 //update completed task with unique id
                 completedTask = {
                     completedId: completedDB > 0 ? Math.max(...completedDB.map(task => task.completedId)) + 1 : 1,
                     ...completedTask,
-                    completionDate: formattedDate
+                    completionDate: nowDateTime
                 };
                 //push completed task
                 completedDB.push(completedTask);

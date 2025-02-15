@@ -6,6 +6,7 @@ const taskPriority = document.getElementById('taskPriority');
 const btnSubmit = document.getElementById('btnSubmit');
 const taskList = document.getElementById('taskList');
 const completedList = document.getElementById('completedList');
+const completedTitle = document.getElementById('completedTitle');
 
 //Render Tasks Function
 function renderTasks(record) {
@@ -21,7 +22,7 @@ function renderTasks(record) {
     const btnDelete = document.createElement('button');
     //set attributes
     divCol.classList.add('col');
-    divCard.classList.add('card');
+    divCard.classList.add('card', 'h-100', 'shadow', 'bg-body-tertiary', 'rounded');
     divCardBody.classList.add('card-body');
     h5El.classList.add('card-header');
     pElId.classList.add('card-text', 'visually-hidden');
@@ -54,12 +55,12 @@ function renderCompleted(record) {
     const pElDate = document.createElement('p');
     //set attributes
     divCol.classList.add('col');
-    divCard.classList.add('card');
+    divCard.classList.add('card', 'h-100', 'bg-body-tertiary', 'rounded');
     divCardBody.classList.add('card-body');
-    h5El.classList.add('card-header');
+    h5El.classList.add('card-header', 'text-body-secondary');
     pElDesc.classList.add('card-text');
     pElPrio.classList.add('card-text');
-    pElDate.classList.add('card-footer', 'h-100');
+    pElDate.classList.add('card-footer', 'mb-0', 'text-body-secondary');
     //set text
     h5El.textContent = record.title;
     pElDesc.textContent = `${record.description}`;
@@ -112,7 +113,10 @@ function deleteTask(id) {
         }
         return response.json();
     })
-    .then(data => alert(data.message))
+    .then(data => {
+        alert(data.message);
+        getTasks() //gets the fresh set of tasks
+    })
     .catch(error => {
         console.error('Error:', error.message);
         alert(error.message);
@@ -132,8 +136,8 @@ function completeTask(id) {
     .then(data => {
         alert(data.message);
         console.log(data);
-        //render completed task on completed list in UI
-        renderCompleted(data.task);
+        getTasks(); //gets the fresh set of tasks
+        getCompletedTasks(); //gets the fresh set of completed tasks
     })
     .catch(error => {
         console.error('Error:', error.error);
@@ -196,31 +200,21 @@ btnSubmit.addEventListener('click', (event) => {
     taskDescription.value = '';
     taskPriority.value = 'Low';
 });
-//On delete button
+//On delete and completed buttons
 taskList.addEventListener('click', (event) => {
     event.preventDefault();
     //check which button was clicked
-    if(event.target.tagName === 'BUTTON' && event.target.textContent === 'Delete') {
+    if(event.target.tagName === 'BUTTON') {
         //capture the card task id and parent
         const taskId = event.target.parentElement.children[0].textContent;
         const taskCard = event.target.parentElement.parentElement.parentElement;
-        //call on delete task function
-        deleteTask(taskId);
-        //remove from UI
-        taskCard.remove();
-    };
-});
-//On completed button
-taskList.addEventListener('click', (event) => {
-    event.preventDefault();
-    //check which button was clicked
-    if(event.target.tagName === 'BUTTON' && event.target.textContent === 'Completed') {
-        //capture the card task id and parent
-        const taskId = event.target.parentElement.children[0].textContent;
-        const taskCard = event.target.parentElement.parentElement.parentElement;
-        //call on complete task function
-        completeTask(taskId);
-        //remove from UI
-        taskCard.remove();
+
+        if (event.target.textContent === 'Delete') {
+            //call on delete task function
+            deleteTask(taskId);
+        } else if (event.target.textContent === 'Completed') {
+            //call on complete task function
+            completeTask(taskId);
+        };
     };
 });
