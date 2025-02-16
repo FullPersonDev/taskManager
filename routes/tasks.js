@@ -26,7 +26,7 @@ tasksR.get('/', (req, res) => {
 tasksR.post('/', (req, res) => {
     //check if main input is provided
     if (!req.body.title) {
-        return res.status(400).json({message: 'Please provide at least a task title'});
+        return res.status(400).json({message: 'task title required'});
     };
     //read from database file
     fs.readFile('./db/tasks.json', 'utf8', (err, data) => {
@@ -52,7 +52,7 @@ tasksR.post('/', (req, res) => {
         //save the update data back to database
         fs.writeFile('./db/tasks.json', JSON.stringify(tasksDB, null, 2), (err) => {
             if(err) {console.error(err)};
-            res.status(201).json({message: "New task saved successfully!"});
+            res.status(201).json({message: "task added"});
         });
     });
 });
@@ -89,7 +89,7 @@ tasksR.delete('/:id', (req, res) => {
                 return res.status(500).json({error: 'Could not delete task'});
             };
             //respond back to client
-            res.status(201).json({message: 'Task deleted', task: taskToDelete});
+            res.status(201).json({message: 'task deleted', task: taskToDelete});
         });
     });
 });
@@ -153,7 +153,7 @@ tasksR.delete('/completed/:id', (req, res) => {
                         return res.status(500).json({error: 'Could not add to completed list'});
                     };
                     //respond back to client
-                    res.status(201).json({message: 'Task completed', task: completedTask});
+                    res.status(201).json({message: 'task completed', task: completedTask});
                 });
             });
         });
